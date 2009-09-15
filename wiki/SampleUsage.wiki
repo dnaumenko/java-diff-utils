@@ -1,0 +1,94 @@
+#summary Sample usage of Java Diff Utills API
+#labels Featured,Phase-Design
+
+= Introduction =
+
+The all common operation of this library is available through static methods of DiffUtills object. These methods are:
+
+  * `DiffUtills.diff(List<?> original, List<?>  revised): Patch patch`
+  * `DiffUtills.patch(List<?> original, Patch patch): List<?> revised`
+  * `DiffUtills.unpatch(List<?> revised, Patch patch): List<?> original`
+  * `DiffUtills.parseUnifiedDiff(List<String> diff): Patch patch`
+  * `DiffUtills.getDiffRows(List<String> original, List<String> revised): List<DiffRow> diffRows`
+
+=== Basic use in a Java App ===
+
+== Task 1: Compute the difference between to files and print its deltas ==
+
+*Solution:*
+
+{{{
+import difflib.*;
+ 
+public class BasicJavaApp_Task1 {
+        // Helper method for get the file content
+	private List<String> fileToLines(String filename) {
+		List<String> lines = new LinkedList<String>();
+		String line = "";
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(filename));
+			while ((line = in.readLine()) != null) {
+				lines.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return lines;
+	}
+
+	public static void main(String[] args) {
+                original = fileToLines("originalFile.txt");
+                revised  = fileToLines("revisedFile.xt");
+                
+                // Compute diff. Get the Patch object. Patch is the container for computed deltas.
+                Patch patch = DiffUtills.diff(original, revised);
+
+                for (Delta delta: patch.getDeltas()) {
+                	System.out.println(delta);
+                }
+	}
+}
+}}}
+
+
+== Task 2: Get the file in unified format and apply it as the patch to given text ==
+
+*Solution:*
+
+{{{
+import difflib.*;
+ 
+public class BasicJavaApp_Task2 {
+        private List<String> originalList = Arrays.asList("aaa", "bbb", "ccc");
+
+        // Helper method for get the file content
+	private List<String> fileToLines(String filename) {
+		List<String> lines = new LinkedList<String>();
+		String line = "";
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(filename));
+			while ((line = in.readLine()) != null) {
+				lines.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return lines;
+	}
+
+	public static void main(String[] args) {
+                // At first, parse the unified diff file and get the patch
+		Patch patch = DiffUtills.parseUnifiedDiff(fileToLines("example.diff"));
+                
+                // Then apply the computed patch to the given text
+                List result = DiffUtills.patch(original, patch);
+                /// Or we can call patch.applyTo(original). There is no difference.
+	}
+}
+}}}
+
+== Task 3: Compute the difference between to texts and print it in human-readable side-by-side view ==
+
+*Solution:*
+
+_Coming soon..._
