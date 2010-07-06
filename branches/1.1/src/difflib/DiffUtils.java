@@ -171,4 +171,137 @@ public class DiffUtils {
 		return patch;
 	}
 	
+	/**
+	 * generateUnifiedDiff takes a Patch and some other arguments, returning the Unified Diff format text representing the Patch.
+	 * @author Bill James (tankerbay@gmail.com)
+	 * 
+	 * @param fname1 - Filename of the original (unrevised file)
+	 * @param fname2 - Filename of the revised file
+	 * @param originalLines - Lines of the original file
+	 * @param patch - Patch created by the diff() function
+	 * @param contextSize - number of lines of context output around each difference in the file.
+	 * @return List of strings representing the Unified Diff representation of the Patch argument.
+	 */
+	public static List<String> generateUnifiedDiff(String fname1, String fname2, List<String> originalLines, Patch patch, int contextSize ) {
+		List<String> ret = new ArrayList<String>();
+		ret.add( "--- " + fname1 );
+		ret.add( "+++ " + fname2 );
+		
+        List<Delta> cur = new ArrayList<Delta>();   // current list of Delta's to process
+        int deltact = patch.getDeltas().size();
+        // if there's more than 1 Delta, we may need to output them together
+        if ( deltact > 1 ) {
+          Delta curDelta = patch.getDelta(0);
+          cur.add( curDelta );   									// add the first Delta to the current set
+          for ( int i = 1; i < deltact; i++ ) {
+        	int curpos = curDelta.getOriginal().getPosition();   		// store the current position of the first Delta  
+            Delta nextDelta = patch.getDelta(i);						// Check if the next Delta is too close to the current position
+            if ( (curpos + curDelta.getOriginal().getSize() + contextSize) >= ( nextDelta.getOriginal().getPosition()-contextSize ) ) {
+              cur.add( nextDelta );  								// if it is, add it to the current set
+            } else {
+              List<String> curBlock = processDeltas( originalLines, cur, contextSize );
+              ret.addAll( curBlock );							// if it isn't, output the current set, then create a new 
+              cur.clear();											// set and add the current Delta to it.
+              cur.add( nextDelta );
+            }
+            curDelta = nextDelta;
+          }
+          List<String> curBlock = processDeltas( originalLines, cur, contextSize );  // don't forget to process the last set of Deltas
+          ret.addAll( curBlock );
+        }
+
+		return ret;
+	}
+
+   /**
+     * processDeltas takes a list of Deltas and outputs them together in a single block of Unified-Diff-format text.
+	 * @author Bill James (tankerbay@gmail.com)
+	 * 
+     * @param origLines - the lines of the original file
+     * @param deltas    - the Deltas to be output as a single block
+     * @param contextSize - the number of lines of context to place around block
+     * @return
+     */
+      private static List<String> processDeltas( List<String> origLines, List<Delta> deltas, int contextSize ) {
+        List<String> buffer = new ArrayList<String>();
+        int origTotal = 0;   // counter for total lines output from Original
+        int revTotal = 0;    // counter for total lines output from Original
+        int line;
+
+        Delta curDelta = deltas.get(0);  // start with the first Delta
+        int origStart = curDelta.getOriginal().getPosition()+1 - contextSize;  	// note the +1 to overcome the 0-offset Position
+        if ( origStart < 1 ) origStart = 1;                                    	// clamp to the start of the file
+        int revStart = curDelta.getRevised().getPosition()+1 - contextSize;    	// note the +1 to overcome the 0-offset Position
+        if ( revStart < 1 ) revStart = 1;										// clamp to the start of the file
+        int contextStart = curDelta.getOriginal().getPosition() - contextSize;	// find the start of the wrapper context code
+        if ( contextStart < 0 ) contextStart = 0;								// clamp to the start of the file
+        for ( line = contextStart; line < curDelta.getOriginal().getPosition(); line++ ) {  // output the context before the first Delta
+          buffer.add( " " + origLines.get( line ) );
+          origTotal++;
+          revTotal++;
+        }
+        buffer.addAll( getDeltaText( curDelta ) );           					// output the first Delta
+        origTotal += curDelta.getOriginal().getLines().size();
+        revTotal += curDelta.getRevised().getLines().size();
+
+        int deltaIndex = 1;
+        while ( deltaIndex < deltas.size() ) { 									// for each of the other Deltas
+           Delta nextDelta = deltas.get( deltaIndex );
+           int intermediateStart = curDelta.getOriginal().getPosition() + curDelta.getOriginal().getLines().size();
+           for ( line = intermediateStart; line < nextDelta.getOriginal().getPosition(); line++ ) {
+              buffer.add( " " + origLines.get( line ) );						// output the code between the last Delta and this one
+              origTotal++;
+              revTotal++;
+           }
+           buffer.addAll( getDeltaText( nextDelta ) );							// output the Delta
+           origTotal += nextDelta.getOriginal().getLines().size();
+           revTotal += nextDelta.getRevised().getLines().size();
+           curDelta = nextDelta;
+           deltaIndex++;														// increment the iterator
+        }
+
+        // Now output the post-Delta context code, clamping the end of the file
+        contextStart = curDelta.getOriginal().getPosition() + curDelta.getOriginal().getLines().size();
+        for ( line = contextStart; ( line < (contextStart + contextSize )) && ( line < origLines.size() ); line++ ) {
+          buffer.add( " " + origLines.get( line ) );
+          origTotal++;
+          revTotal++;
+        }
+
+        // Create and insert the block header, conforming to the Unified Diff standard
+        StringBuffer header = new StringBuffer();
+        header.append( "@@ -" );
+        header.append( origStart );
+        header.append( "," );
+        header.append( origTotal );
+        header.append( " +" );
+        header.append( revStart );
+        header.append( "," );
+        header.append( revTotal );
+        header.append( " @@" );
+        buffer.add( 0, header.toString() );
+
+        return buffer;
+      }
+
+      /**
+       * getDeltaText returns the lines to be added to the Unified Diff text from the Delta parameter
+       * @author Bill James (tankerbay@gmail.com)
+       * 
+       * @param delta - the Delta to output
+       * @return list of String lines of code.
+       */
+      private static List<String> getDeltaText( Delta delta ) {
+        List<String> buffer = new ArrayList<String>();
+        for ( Object line: delta.getOriginal().getLines() ) {
+          buffer.add( "-" + line );
+        }
+        for ( Object line: delta.getRevised().getLines() ) {
+          buffer.add( "+" + line );
+        }
+        return buffer;
+      }
+	
+	
+	
 }
