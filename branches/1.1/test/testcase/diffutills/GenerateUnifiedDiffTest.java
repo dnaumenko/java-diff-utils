@@ -16,8 +16,10 @@ import junit.framework.TestCase;
 
 public class GenerateUnifiedDiffTest extends TestCase {
     static final String FS = File.separator;
-    static final String originalFilename = "test" + FS + "mocks" + FS + "original.java";
-    static final String revisedFilename = "test" + FS + "mocks" + FS + "revised.java";
+    static final String originalFilename = "test" + FS + "mocks" + FS + "original.txt";
+    static final String revisedFilename = "test" + FS + "mocks" + FS + "revised.txt";
+    static final String originalFilenameOneDelta = "test" + FS + "mocks" + FS + "one_delta_test_original.txt";
+    static final String revisedFilenameOneDelta = "test" + FS + "mocks" + FS + "one_delta_test_revised.txt";
     
     public List<String> fileToLines(String filename) {
         List<String> lines = new LinkedList<String>();
@@ -34,17 +36,31 @@ public class GenerateUnifiedDiffTest extends TestCase {
     }
     
     /**
+     * Tests the Unified Diff generation by creating a Patch, then
+     * creating the Unified Diff representation, then parsing that
+     * Unified Diff, and applying the patch to the original unrevised
+     * text, then comparing that to the original revised text.
+     *         
      * @author Bill James (tankerbay@gmail.com)
-     * 
-     *         Tests the Unified Diff generation by creating a Patch, then
-     *         creating the Unified Diff representation, then parsing that
-     *         Unified Diff, and applying the patch to the original unrevised
-     *         text, then comparing that to the original revised text.
      */
     public void testGenerateUnified() {
         List<String> origLines = fileToLines(originalFilename);
         List<String> revLines = fileToLines(revisedFilename);
         
+        testGenerateUnified(origLines, revLines);
+    }
+    
+    /**
+     * Tests the Unified Diff generation for diff with one delta.
+     */
+    public void testGenerateUnifiedWithOneDelta() {
+        List<String> origLines = fileToLines(originalFilenameOneDelta);
+        List<String> revLines = fileToLines(revisedFilenameOneDelta);
+        
+        testGenerateUnified(origLines, revLines);
+    }
+    
+    private void testGenerateUnified(List<String> origLines, List<String> revLines) {
         Patch p = DiffUtils.diff(origLines, revLines);
         List<String> unifiedDiff = DiffUtils.generateUnifiedDiff(
                 originalFilename, revisedFilename, origLines, p, 10);
@@ -67,5 +83,6 @@ public class GenerateUnifiedDiffTest extends TestCase {
             }
         }
     }
-    
+
+
 }
