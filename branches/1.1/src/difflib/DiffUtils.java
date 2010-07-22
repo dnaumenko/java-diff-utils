@@ -188,11 +188,20 @@ public class DiffUtils {
         ret.add("--- " + original);
         ret.add("+++ " + revised);
         
+        // Hmm, I thought the Deltas were sorted already... turns out they're not.
+        List<Delta> patchDeltas = new ArrayList<Delta>( patch.getDeltas() );
+        Collections.sort( patchDeltas, new Comparator<Delta>() {
+        	public int compare( Delta a, Delta b ) {
+        		return new Integer(a.getOriginal().getPosition()).compareTo( b.getOriginal().getPosition() );
+        	}
+        });
+        
+        // code outside the if block also works for single-delta issues.
         List<Delta> deltas = new ArrayList<Delta>(); // current list of Delta's to process
+        Delta delta = patch.getDelta(0);
+        deltas.add(delta); // add the first Delta to the current set
         // if there's more than 1 Delta, we may need to output them together
         if (patch.getDeltas().size() > 1) {
-            Delta delta = patch.getDelta(0);
-            deltas.add(delta); // add the first Delta to the current set
             for (int i = 1; i < patch.getDeltas().size(); i++) {
                 int position = delta.getOriginal().getPosition(); // store the current position of
                                                                    // the first Delta
@@ -214,10 +223,10 @@ public class DiffUtils {
                 delta = nextDelta;
             }
             
-            // don't forget to process the last set of Deltas
-            List<String> curBlock = processDeltas(originalLines, deltas, contextSize);
-            ret.addAll(curBlock);
         }
+        // don't forget to process the last set of Deltas
+        List<String> curBlock = processDeltas(originalLines, deltas, contextSize);
+        ret.addAll(curBlock);
         
         return ret;
     }
