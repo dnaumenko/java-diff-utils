@@ -57,10 +57,16 @@
 
 package difflib.myers;
 
-import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.List;
 
-import difflib.*;
+import difflib.ChangeDelta;
+import difflib.Chunk;
+import difflib.DeleteDelta;
+import difflib.Delta;
+import difflib.DiffAlgorithm;
+import difflib.InsertDelta;
+import difflib.Patch;
 
 /**
  * A clean-room implementation of <a href="http://www.cs.arizona.edu/people/gene/">
@@ -208,8 +214,8 @@ public class MyersDiff implements DiffAlgorithm {
             int ianchor = path.i;
             int janchor = path.j;
             
-            Chunk original = new Chunk(ianchor, i - ianchor, Arrays.copyOfRange(orig, ianchor, i));
-            Chunk revised = new Chunk(janchor, j - janchor, Arrays.copyOfRange(rev, janchor, j));
+            Chunk original = new Chunk(ianchor, i - ianchor, copyOfRange(orig, ianchor, i));
+            Chunk revised = new Chunk(janchor, j - janchor, copyOfRange(rev, janchor, j));
             Delta delta = null;
             if (original.getSize() == 0 && revised.getSize() != 0) {
                 delta = new InsertDelta(original, revised);
@@ -224,6 +230,30 @@ public class MyersDiff implements DiffAlgorithm {
                 path = path.prev;
         }
         return patch;
+    }
+    
+    /**
+     * Copied here from JDK 1.6
+    */
+    
+    @SuppressWarnings("unchecked")
+    public static <T> T[] copyOfRange(T[] original, int from, int to) {
+        return copyOfRange(original, from, to, (Class<T[]>) original.getClass());
+    }
+    
+    /**
+     * Copied here from JDK 1.6
+     */
+    @SuppressWarnings("unchecked")
+    public static <T, U> T[] copyOfRange(U[] original, int from, int to,
+            Class<? extends T[]> newType) {
+        int newLength = to - from;
+        if (newLength < 0)
+            throw new IllegalArgumentException(from + " > " + to);
+        T[] copy = ((Object) newType == (Object) Object[].class) ? (T[]) new Object[newLength]
+                : (T[]) Array.newInstance(newType.getComponentType(), newLength);
+        System.arraycopy(original, from, copy, 0, Math.min(original.length - from, newLength));
+        return copy;
     }
     
 }
