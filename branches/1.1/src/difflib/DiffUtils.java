@@ -198,17 +198,17 @@ public class DiffUtils {
         
         // code outside the if block also works for single-delta issues.
         List<Delta> deltas = new ArrayList<Delta>(); // current list of Delta's to process
-        Delta delta = patch.getDelta(0);
+        Delta delta = patchDeltas.get(0);
         deltas.add(delta); // add the first Delta to the current set
         // if there's more than 1 Delta, we may need to output them together
-        if (patch.getDeltas().size() > 1) {
-            for (int i = 1; i < patch.getDeltas().size(); i++) {
+        if (patchDeltas.size() > 1) {
+            for (int i = 1; i < patchDeltas.size(); i++) {
                 int position = delta.getOriginal().getPosition(); // store the current position of
                                                                    // the first Delta
                 
                 // Check if the next Delta is too close to the current position.
                 // And if it is, add it to the current set
-                Delta nextDelta = patch.getDelta(i); 
+                Delta nextDelta = patchDeltas.get(i); 
                 if ((position + delta.getOriginal().getSize() + contextSize) >= 
                     (nextDelta.getOriginal().getPosition() - contextSize)) {
                     deltas.add(nextDelta); 
