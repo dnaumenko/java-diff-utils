@@ -1,15 +1,15 @@
-#summary Sample usage of Java Diff Utills API
+#summary Sample usage of Java Diff Utils API
 #labels Featured,Phase-Design
 
 = Introduction =
 
-The all common operation of this library is available through static methods of DiffUtills object. These methods are:
+The all common operation of this library is available through static methods of DiffUtils object. These methods are:
 
-  * `DiffUtills.diff(List<?> original, List<?>  revised): Patch patch`
-  * `DiffUtills.patch(List<?> original, Patch patch): List<?> revised`
-  * `DiffUtills.unpatch(List<?> revised, Patch patch): List<?> original`
-  * `DiffUtills.parseUnifiedDiff(List<String> diff): Patch patch`
-  * `DiffUtills.getDiffRows(List<String> original, List<String> revised): List<DiffRow> diffRows`
+  * `DiffUtils.diff(List<?> original, List<?>  revised): Patch patch`
+  * `DiffUtils.patch(List<?> original, Patch patch): List<?> revised`
+  * `DiffUtils.unpatch(List<?> revised, Patch patch): List<?> original`
+  * `DiffUtils.parseUnifiedDiff(List<String> diff): Patch patch`
+  * `DiffUtils.getDiffRows(List<String> original, List<String> revised): List<DiffRow> diffRows`
 
 === Basic use in a Java App ===
 
@@ -41,7 +41,7 @@ public class BasicJavaApp_Task1 {
                 revised  = fileToLines("revisedFile.xt");
                 
                 // Compute diff. Get the Patch object. Patch is the container for computed deltas.
-                Patch patch = DiffUtills.diff(original, revised);
+                Patch patch = DiffUtils.diff(original, revised);
 
                 for (Delta delta: patch.getDeltas()) {
                 	System.out.println(delta);
@@ -78,10 +78,10 @@ public class BasicJavaApp_Task2 {
 
 	public static void main(String[] args) {
                 // At first, parse the unified diff file and get the patch
-		Patch patch = DiffUtills.parseUnifiedDiff(fileToLines("example.diff"));
+		Patch patch = DiffUtils.parseUnifiedDiff(fileToLines("example.diff"));
                 
                 // Then apply the computed patch to the given text
-                List result = DiffUtills.patch(original, patch);
+                List result = DiffUtils.patch(original, patch);
                 /// Or we can call patch.applyTo(original). There is no difference.
 	}
 }
