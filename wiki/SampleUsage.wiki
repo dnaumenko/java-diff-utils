@@ -37,8 +37,8 @@ public class BasicJavaApp_Task1 {
 	}
 
 	public static void main(String[] args) {
-                original = fileToLines("originalFile.txt");
-                revised  = fileToLines("revisedFile.xt");
+                List<String> original = fileToLines("originalFile.txt");
+                List<String> revised  = fileToLines("revisedFile.xt");
                 
                 // Compute diff. Get the Patch object. Patch is the container for computed deltas.
                 Patch patch = DiffUtils.diff(original, revised);
