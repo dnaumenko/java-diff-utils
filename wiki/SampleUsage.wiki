@@ -11,6 +11,8 @@ The all common operation of this library is available through static methods of 
   * `DiffUtils.parseUnifiedDiff(List<String> diff): Patch patch`
   * `DiffUtils.getDiffRows(List<String> original, List<String> revised): List<DiffRow> diffRows`
 
+NOTE: All up-to-date examples can be found [http://code.google.com/p/java-diff-utils/source/browse/#svn%2Ftrunk%2Ftest%2Fexamples%2Fdiffutils here]
+
 === Basic use in a Java App ===
 
 == Task 1: Compute the difference between to files and print its deltas ==
