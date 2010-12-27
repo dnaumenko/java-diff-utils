@@ -22,7 +22,7 @@ import difflib.*;
  
 public class BasicJavaApp_Task1 {
         // Helper method for get the file content
-	private List<String> fileToLines(String filename) {
+	private static List<String> fileToLines(String filename) {
 		List<String> lines = new LinkedList<String>();
 		String line = "";
 		try {
