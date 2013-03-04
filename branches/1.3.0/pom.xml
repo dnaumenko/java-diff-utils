@@ -16,8 +16,8 @@
 		<version>7</version>
 	</parent>
 	<scm>
-		<connection>scm:svn:http://java-diff-utils.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://java-diff-utils.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:svn:http://java-diff-utils.googlecode.com/svn/branches/1.3.0/</connection>
+		<developerConnection>scm:svn:https://java-diff-utils.googlecode.com/svn/branches/1.3.0</developerConnection>
 		<url>http://code.google.com/p/java-diff-utils/source/browse/</url>
 	</scm>
 	<licenses>
@@ -28,7 +28,8 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-
+	<developers />
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
