@@ -1,0 +1,17 @@
+project/project
+project/target
+
+target
+tmp
+.DS_Store
+.history
+dist
+/.idea
+/*.iml
+/out
+/.classpath
+/.project
+/.settings
+/.idea_modules
+.gitignore.swo
+.gitignore.swp
