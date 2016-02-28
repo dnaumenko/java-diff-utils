@@ -72,7 +72,7 @@ import java.util.List;
  * http://www.cs.arizona.edu/people/gene/PAPERS/diff.ps</a></p>
  *
  * @author <a href="mailto:juanco@suigeneris.org">Juanco Anez</a>
- * @param T The type of the compared elements in the 'lines'.
+ * T The type of the compared elements in the 'lines'.
  */
 public class MyersDiff<T> implements DiffAlgorithm<T> {
     

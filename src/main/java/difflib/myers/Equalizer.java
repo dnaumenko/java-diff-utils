@@ -3,7 +3,7 @@ package difflib.myers;
 /**
  * Specifies when two compared elements in the Myers algorithm are equal.
  * 
- * @param T The type of the compared elements in the 'lines'.
+ * T The type of the compared elements in the 'lines'.
  */
 public interface Equalizer<T> {
 	
