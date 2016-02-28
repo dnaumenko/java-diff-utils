@@ -5,12 +5,12 @@ Main reason to build this library was the lack of easy-to-use libraries with all
 # Main Features
 
 * computing the difference between two texts.
-* capable to hand more than plain ascci. Arrays or List of any type that implements hashCode() and equals() correctly can be subject to differencing using this library
+* capable to hand more than plain ASCII. Arrays or List of any type that implements hashCode() and equals() correctly can be subject to differencing using this library
 * patch and unpatch the text with the given patch
 * parsing the unified diff format
 * producing human-readable differences
 
-# Algoritms
+# Algorithms
 
 This library implements Myer's diff algorithm. But it can easily replaced by any other which is better for handing your texts. I have plan to add implementation of some in future.
 
