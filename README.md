@@ -28,11 +28,12 @@ Just add the code below to your maven dependencies:
     <dependency>
         <groupId>com.googlecode.java-diff-utils</groupId>
         <artifactId>diffutils</artifactId>
-        <version>1.2.1</version>
+        <version>1.3.0</version>
     </dependency>
 
 And for Ivy:
-    <dependency org="com.googlecode.java-diff-utils" name="diffutils" rev="1.2.1"/>
+
+    <dependency org="com.googlecode.java-diff-utils" name="diffutils" rev="1.3.0"/>
 
 # Coming eventually
 
