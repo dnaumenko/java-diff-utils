@@ -14,18 +14,25 @@ Main reason to build this library was the lack of easy-to-use libraries with all
 
 This library implements Myer's diff algorithm. But it can easily replaced by any other which is better for handing your texts. I have plan to add implementation of some in future.
 
-Changelog
+# Changelog
 
-* Version 1.2
-** JDK 1.5 compatibility
-**  Ant build script
-** Generate output in unified diff format (thanks for Bill James)
+## Version 1.2
+* JDK 1.5 compatibility
+* Ant build script
+* Generate output in unified diff format (thanks for Bill James)
 
 # To Install
 
-Just add the code below to your maven dependencies: <dependency> <groupId>com.googlecode.java-diff-utils</groupId> <artifactId>diffutils</artifactId> <version>1.2.1</version> </dependency>
+Just add the code below to your maven dependencies:
 
-And for Ivy: <dependency org="com.googlecode.java-diff-utils" name="diffutils" rev="1.2.1"/>
+    <dependency>
+        <groupId>com.googlecode.java-diff-utils</groupId>
+        <artifactId>diffutils</artifactId>
+        <version>1.2.1</version>
+    </dependency>
+
+And for Ivy:
+    <dependency org="com.googlecode.java-diff-utils" name="diffutils" rev="1.2.1"/>
 
 # Coming eventually
 
