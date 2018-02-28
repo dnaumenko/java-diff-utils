@@ -384,6 +384,14 @@ public class DiffUtils {
 			revTotal++;
 		}
 
+		// In case of empty chunk and context
+		if (origTotal == 0 && origStart > 1)
+			--origStart;
+
+		// In case of empty chunk and context
+		if (revTotal == 0 && revStart > 1)
+			--revStart;
+
 		// Create and insert the block header, conforming to the Unified Diff
 		// standard
 		StringBuffer header = new StringBuffer();
