@@ -214,7 +214,7 @@ public class DiffUtils {
 						old_ln, oldChunkLines), new Chunk<String>(new_ln - 1,
 						newChunkLines)));
 			} else if (newChunkLines.isEmpty()) {
-				patch.addDelta(new InsertDelta<String>(new Chunk<String>(
+				patch.addDelta(new DeleteDelta<String>(new Chunk<String>(
 						old_ln - 1, oldChunkLines), new Chunk<String>(new_ln,
 						newChunkLines)));
 			} else {
