@@ -76,7 +76,7 @@
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 1.1</name>
-			<url>http://www.apache.org/licenses/LICENSE-1.1/url>
+			<url>http://www.apache.org/licenses/LICENSE-1.1</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
 		</license>
